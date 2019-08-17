@@ -10,6 +10,7 @@ from itertools import groupby
 import sys
 sys.path.append('.')
 from utils.recommend import GetRecommendation
+from utils.common import group_data
 from data.read_data import ratings
 
 
@@ -97,18 +98,6 @@ if __name__ == "__main__":
     train_data, test_data = SplitData(data, 8, 1, 0)
 
     print("训练数据：", train_data[:2], "\n测试数据：", test_data[:2])
-
-
-    def group_data(d):
-        """给数据分组，形成字典：key为用户id，value为item集合
-
-        :param d:二维列表
-        :return:
-        """
-        dic = dict()
-        for a, b in groupby(d, key=lambda e:e[0]):
-            dic[a] = set([i[1] for i in b])
-        return dic
 
 
     # 测试Recall
