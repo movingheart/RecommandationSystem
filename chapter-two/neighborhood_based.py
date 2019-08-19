@@ -70,12 +70,21 @@ def UserSimilarity(train):
 
 
 def Recommend(user, train, W, K, L):
+    """ 推荐和user相似的用户看过的商品
+
+    :param user: 被推荐的用户
+    :param train: 训练集，格式：{u1:{item1, item2}, u2:{item3, item4}, ...}
+    :param W: 用户相似度矩阵
+    :param K: 取Ｋ个相似的用户
+    :param L: 取Ｌ个兴趣度最高的物品
+    :return:
+    """
     rank = dict()
     # 获得用户user看过的商品
     interacted_items = train[user]
     # 得到和用户user兴趣最接近的K个用户
     for v, wuv in sorted(W[user].items(), key=itemgetter(1), reverse=True)[0:K]:
-        # 处理用户v看过的商品i
+        # 处理和user相似的用户v看过的商品i
         for i in train[v]:
             rvi = 1
             if i in interacted_items:
@@ -83,6 +92,7 @@ def Recommend(user, train, W, K, L):
             if i not in rank:
                 rank[i] = 0
             rank[i] += wuv * rvi
+    # 推荐Ｌ个兴趣度最高的物品, 此处可使用Random或者MostPopular筛选
     return sorted(rank.items(), key=itemgetter(1), reverse=True)[:L]
 
 if __name__ == "__main__":
