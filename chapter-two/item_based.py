@@ -39,16 +39,18 @@ def ItemSimilarity(train):
     return W
 
 
-def Recommendation(train, user_id, W, K):
+def Recommendation(train, user_id, W, K, L):
     rank = dict()
     ru = train[user_id]
     for i in ru:
         pi = 1
-        for j, wj in sorted(W[i].items(), key=itemgetter[1], reverse=True)[:K]:
+        for j, wj in sorted(W[i].items(), key=itemgetter(1), reverse=True)[:K]:
             if j in ru:
                 continue
+            if j not in rank:
+                rank[j] = 0
             rank[j] += pi * wj
-    return rank
+    return sorted(rank.items(), key=itemgetter(1), reverse=True)[:L]
 
 
 if __name__ == "__main__":
@@ -57,4 +59,4 @@ if __name__ == "__main__":
     train = group_data(train_data)
 
     w = ItemSimilarity(train)
-    print(Recommendation(train, 5, w, 8))
+    print(Recommendation(train, 5, w, 8, 8))
